@@ -194,7 +194,8 @@ body {
 /* PROJECTS */
 .projects {
   padding: 4rem 2rem;
-  background: #f4f4f4;
+  background: #1a1a1a; /* dark background for contrast */
+  color: #fff; /* text color to stand out */
 }
 
 .project-grid {
