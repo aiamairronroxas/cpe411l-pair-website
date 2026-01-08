@@ -3,40 +3,53 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* GLOBAL */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  line-height: 1.6;
   color: #333;
 }
 
-h2 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 1s ease forwards; }
+.fade-down { animation: fadeDown 1s ease forwards; }
 
 /* NAVBAR */
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  justify-content: space-between;
   background: #111;
   color: #fff;
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
+  z-index: 100;
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: bold;
 }
 
+/* NAV LINKS */
 .nav-links {
-  display: flex;
   list-style: none;
+  display: flex;
 }
 
 .nav-links li {
@@ -44,46 +57,84 @@ h2 {
 }
 
 .nav-links a {
-  color: #fff;
+  color: white;
   text-decoration: none;
+  position: relative;
 }
 
-.nav-links a:hover {
-  color: #00adb5;
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #00adb5;
+  left: 0;
+  bottom: -5px;
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* HAMBURGER */
+#menu-toggle {
+  display: none;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  margin: 4px 0;
+  transition: 0.3s;
 }
 
 /* HOME */
 .home {
-  height: 90vh;
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, #222, #444);
-  color: #fff;
   text-align: center;
-  padding: 1rem;
+  background: linear-gradient(135deg, #222, #444);
+  color: white;
+  padding: 2rem;
 }
 
-.home h1 span {
+.home span {
   color: #00adb5;
 }
 
+/* BUTTON */
 .btn {
   display: inline-block;
   margin-top: 1.5rem;
-  padding: 0.7rem 1.5rem;
+  padding: 0.8rem 1.8rem;
   background: #00adb5;
-  color: #fff;
+  color: white;
+  border-radius: 30px;
   text-decoration: none;
-  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px #00adb5;
 }
 
 /* ABOUT */
 .about {
   padding: 4rem 2rem;
-  text-align: center;
   max-width: 900px;
   margin: auto;
+  text-align: center;
 }
 
 /* PROJECTS */
@@ -99,10 +150,16 @@ h2 {
 }
 
 .project-card {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
 
 /* CONTACT */
@@ -120,37 +177,65 @@ h2 {
 
 .contact-form input,
 .contact-form textarea {
+  padding: 0.9rem;
   margin-bottom: 1rem;
-  padding: 0.8rem;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
 
-.contact-form button {
-  padding: 0.8rem;
-  border: none;
-  background: #00adb5;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 5px;
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #00adb5;
+  outline: none;
 }
 
 /* FOOTER */
 footer {
   background: #111;
-  color: #fff;
+  color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 1.2rem;
 }
 
-/* RESPONSIVE NAVBAR */
+/* MOBILE NAV */
 @media (max-width: 768px) {
-  .nav-links {
-    flex-direction: column;
+  .hamburger {
+    display: flex;
+  }
+
+  nav {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
     background: #111;
   }
 
+  .nav-links {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
   .nav-links li {
-    margin: 0.5rem 0;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  #menu-toggle:checked ~ nav .nav-links {
+    max-height: 300px;
+  }
+
+  #menu-toggle:checked + .hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  #menu-toggle:checked + .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  #menu-toggle:checked + .hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
   }
 }
